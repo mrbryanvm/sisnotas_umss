@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+# Donde están los tests
+testpaths = ["tests"]
+# Mostrar nombres cortos pero con estado de cada test
+addopts = "-v --tb=short"
+# Marcamos la carpeta raíz del proyecto para que los imports funcionen
+pythonpath = ["."]

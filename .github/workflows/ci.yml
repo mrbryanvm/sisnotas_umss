@@ -1,0 +1,151 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# PIPELINE CI/CD DE EVALUACIÓN Y AUDITORÍA AUTOMATIZADA
+# Proyecto : SisNotas UMSS — Sistema de Gestión de Calificaciones
+# Materia  : Evaluación y Auditoría de Sistemas (UMSS - II/2026)
+# Docente  : Ing. Jimmy Villarroel Novillo
+# Equipo   : Grupo 15 (Bryan Vásquez M., Juan Adiel Butrón A., Fernando Vera V.)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: 🧪 CI - Automatización de Pruebas y Auditoría
+
+# ── 1. DISPARADORES (Triggers / Eventos) ────────────────────────────────────────
+# Define CUÁNDO se activa este robot en la nube.
+on:
+  push:
+    branches: [ "main", "develop" ]      # Se activa al hacer push a main o develop
+  pull_request:
+    branches: [ "main" ]                # Se activa cuando alguien propone cambios a main
+  workflow_dispatch:                     # Permite presionar un botón manual en GitHub para correrlo
+
+# ── 2. CONTROL DE CONCURRENCIA (Ahorro de recursos) ────────────────────────────
+# Si haces 2 commits seguidos rápido, cancela el anterior y solo corre el último.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# ── 3. DEFINICIÓN DE JOBS (Trabajos independientes) ───────────────────────────
+jobs:
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 1: EVALUACIÓN ESTÁTICA (Linting y Verificación de Tipos)
+  # Conexión Cátedra: Unidad 2 — Técnicas de Evaluación Estática (sin ejecutar)
+  # ─────────────────────────────────────────────────────────────────────────────
+  evaluacion-estatica:
+    name: 🔍 1. Evaluación Estática (Flake8 & Sintaxis)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: 📥 Clonar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: 🐍 Configurar entorno Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"  # Acelera la descarga guardando dependencias en caché
+
+      - name: 📦 Instalar herramientas de inspección estática
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: 🔎 Inspección de estilo y errores sintácticos (Flake8)
+        run: |
+          echo "Ejecutando análisis estático sobre src/ y tests/..."
+          # Detiene la ejecución si hay errores de sintaxis o variables no definidas
+          flake8 src/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Advertencias de estilo (líneas muy largas, etc.)
+          flake8 src/ tests/ --count --exit-zero --max-complexity=15 --max-line-length=120 --statistics
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 2: EVALUACIÓN DINÁMICA (Pruebas Automatizadas Pytest + Cobertura)
+  # Conexión Cátedra: Unidad 3 — Técnicas de Evaluación Dinámica (Caja Blanca/Negra)
+  # ─────────────────────────────────────────────────────────────────────────────
+  evaluacion-dinamica:
+    name: 🧪 2. Evaluación Dinámica (Pytest en Python ${{ matrix.python-version }})
+    needs: evaluacion-estatica  # Solo se ejecuta si la evaluación estática tuvo éxito
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # STRATEGY MATRIX: Ejecuta los tests en 3 versiones de Python en paralelo
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+      fail-fast: false # Si una versión falla, no cancela las demás; queremos ver el reporte completo
+
+    steps:
+      - name: 📥 Clonar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: 🐍 Configurar Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: 📦 Instalar dependencias del sistema y de pruebas
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: 🚀 Ejecutar Suite de Pruebas Pytest + Cobertura de Código
+        run: |
+          pytest tests/ -v \
+            --tb=short \
+            --cov=src \
+            --cov-report=term-missing \
+            --cov-report=html:htmlcov \
+            --cov-fail-under=90 \
+            --junitxml=test-results-${{ matrix.python-version }}.xml
+
+      - name: 📊 Subir Reporte HTML de Cobertura como Artefacto
+        if: always() # Se sube siempre, incluso si falló algún test
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-cobertura-py${{ matrix.python-version }}
+          path: htmlcov/
+          retention-days: 7
+
+      - name: 📑 Subir Resultados JUnit XML como Artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-junit-py${{ matrix.python-version }}
+          path: test-results-${{ matrix.python-version }}.xml
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # JOB 3: DICTAMEN DE AUDITORÍA AUTOMATIZADO (Quality Gate)
+  # Conexión Cátedra: 2do Parcial — Dictamen de Auditoría y Control Interno
+  # ─────────────────────────────────────────────────────────────────────────────
+  dictamen-auditoria:
+    name: ⚖️ 3. Dictamen y Veredicto de Calidad
+    needs: [evaluacion-estatica, evaluacion-dinamica]
+    runs-on: ubuntu-latest
+    if: always() # Evalúa tanto si los anteriores pasaron como si fallaron
+
+    steps:
+      - name: 📋 Determinar Veredicto del Pipeline
+        run: |
+          echo "================================================================="
+          echo "           TRIBUNAL DE AUDITORÍA AUTOMATIZADA DE SOFTWARE        "
+          echo "================================================================="
+          echo "Estado Evaluación Estática : ${{ needs.evaluacion-estatica.result }}"
+          echo "Estado Evaluación Dinámica : ${{ needs.evaluacion-dinamica.result }}"
+          echo "-----------------------------------------------------------------"
+          
+          if [ "${{ needs.evaluacion-estatica.result }}" == "success" ] && [ "${{ needs.evaluacion-dinamica.result }}" == "success" ]; then
+            echo "🟢 DICTAMEN: FAVORABLE / LIMPIO"
+            echo "El software cumple razonablemente en todos sus aspectos con los"
+            echo "estándares de codificación, los 59 casos de prueba y la cobertura"
+            echo "mínima exigida del 90% reglamentario (UMSS)."
+            echo "Pase a producción / release: AUTORIZADO."
+            exit 0
+          else
+            echo "🔴 DICTAMEN: DESFAVORABLE / ADVERSO"
+            echo "Se han detectado fallos en las pruebas o desviaciones en el estándar"
+            echo "de codificación. El riesgo de auditoría es ALTO."
+            echo "Pase a producción / release: BLOQUEADO POR CONTROL INTERNO."
+            exit 1
+          fi
