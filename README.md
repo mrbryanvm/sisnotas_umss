@@ -2,21 +2,19 @@
 
 ![CI - Automatización de Pruebas y Auditoría](https://github.com/mrbryanvm/sisnotas_umss/actions/workflows/ci.yml/badge.svg)
 ![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)
-![Coverage](https://img.shields.io/badge/coverage-97%25-brightgreen)
+![Coverage](https://img.shields.io/badge/cobertura-97%25-brightgreen)
 ![Tests](https://img.shields.io/badge/tests-59%20passed-success)
-![Auditoría](https://img.shields.io/badge/Dictamen-Favorable%20%2F%20Limpio-success)
 
 > **Materia:** Evaluación y Auditoría de Sistemas (Gestión II-2026)  
 > **Docente:** Ing. Jimmy Villarroel Novillo (J.V.N.)  
 > **Universidad:** Universidad Mayor de San Simón (UMSS) — Cochabamba, Bolivia  
 > **Equipo:** **Grupo 15**  
-> * **Bryan Vásquez Maldonado** (Líder Técnico)  
-> * **Juan Adiel Butrón Agreda**  
-> * **Fernando Vera Vera**  
-
+> * **Butrón Agreda Juan Adiel** 
+> * **Vasquez Maldonado Bryan** 
+> * **Vera Vera Fernando**
 ---
 
-## 📌 1. Descripción del Proyecto
+## 1. Descripción del Proyecto
 
 **SisNotas UMSS** es un microservicio desarrollado en Python que implementa las reglas reales de evaluación estudiantil de la Universidad Mayor de San Simón (parciales, finales, instancias reglamentarias, control de boletas y límites de notas).
 
@@ -24,7 +22,7 @@ Este proyecto sirve como demostración práctica de cómo **GitHub Actions** act
 
 ---
 
-## 🏛️ 2. Reglas de Negocio Implementadas (Reglamento UMSS)
+## 2. Reglas de Negocio Implementadas (Reglamento UMSS)
 
 1. **Parciales ($1P + 2P$):** Si la suma es $\ge 51$, el estudiante **aprueba directamente**. Si es $< 51$, reprueba la etapa de parciales.
 2. **Examen Final (100 pts):** Quien reprobó parciales o desea mejorar nota puede rendir el examen final. Con nota $\ge 51$ **aprueba**; con $< 51$ **reprueba**.
@@ -36,18 +34,18 @@ Este proyecto sirve como demostración práctica de cómo **GitHub Actions** act
 
 ---
 
-## ⚙️ 3. Arquitectura del Pipeline de GitHub Actions
+## 3. Arquitectura del Pipeline de GitHub Actions
 
 El pipeline configurado en `.github/workflows/ci.yml` ejecuta una auditoría automática en 3 etapas secuenciales:
 
 ```mermaid
 graph TD
-    A["🔔 Evento Git (Push / Pull Request)"] --> B["🔍 1. Evaluación Estática<br/>(Flake8 - Estilo y Sintaxis)"]
-    B -->|Éxito| C["🧪 2. Evaluación Dinámica<br/>(Pytest Matrix: Py 3.11, 3.12, 3.13)"]
-    B -->|Fallo| E["🚫 Pipeline Bloqueado<br/>(Alerta de Auditoría)"]
-    C -->|59 Tests OK + Cov ≥ 90%| D["⚖️ 3. Dictamen de Auditoría<br/>(Quality Gate: Dictamen Limpio)"]
+    A["Evento Git (Push / Pull Request)"] --> B["1. Evaluación Estática<br/>(Flake8 - Estilo y Sintaxis)"]
+    B -->|Éxito| C["2. Evaluación Dinámica<br/>(Pytest Matrix: Py 3.11, 3.12, 3.13)"]
+    B -->|Fallo| E["Pipeline Bloqueado<br/>(Alerta de Auditoría)"]
+    C -->|59 Tests OK + Cov ≥ 90%| D["3. Dictamen de Auditoría<br/>(Quality Gate: Dictamen Limpio)"]
     C -->|Fallo en Tests| E
-    D --> F["📦 Artefactos Publicados<br/>(Reportes HTML y XML)"]
+    D --> F["Artefactos Publicados<br/>(Reportes HTML y XML)"]
 ```
 
 ### Componentes Clave del Flujo de Trabajo:
@@ -58,7 +56,7 @@ graph TD
 
 ---
 
-## 🧪 4. Distribución de la Suite de Pruebas (59 Tests)
+## 4. Distribución de la Suite de Pruebas (59 Tests)
 
 | Bloque | Enfoque Evaluativo | Técnica Aplicada | Cantidad |
 | :---: | :--- | :--- | :---: |
@@ -71,7 +69,7 @@ graph TD
 
 ---
 
-## 🚀 5. Ejecución Local
+## 5. Ejecución Local
 
 Para clonar y ejecutar las pruebas localmente en tu entorno:
 
@@ -89,8 +87,8 @@ pytest tests/ -v --cov=src --cov-report=term-missing
 
 ---
 
-## 👥 6. Información de Contacto del Equipo
+## 6. Información de Contacto del Equipo
 
-* **Bryan Vásquez Maldonado** — *Líder de Desarrollo y CI/CD*
-* **Juan Adiel Butrón Agreda** — *Especialista en QA y Diseño de Pruebas*
-* **Fernando Vera Vera** — *Automatización y Soporte de Infraestructura*
+* **Butrón Agreda Juan Adiel** 
+* **Vasquez Maldonado Bryan** 
+* **Vera Vera Fernando**
