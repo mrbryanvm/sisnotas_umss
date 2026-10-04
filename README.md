@@ -1,4 +1,4 @@
-# 🎓 SisNotas UMSS — Automatización de Pruebas con GitHub Actions
+# SisNotas UMSS — Automatización de Pruebas con GitHub Actions
 
 ![CI - Automatización de Pruebas y Auditoría](https://github.com/mrbryanvm/sisnotas_umss/actions/workflows/ci.yml/badge.svg)
 ![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue)
