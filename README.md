@@ -5,13 +5,7 @@
 ![Coverage](https://img.shields.io/badge/cobertura-97%25-brightgreen)
 ![Tests](https://img.shields.io/badge/tests-59%20passed-success)
 
-> **Materia:** Evaluación y Auditoría de Sistemas (Gestión II-2026)  
-> **Docente:** Ing. Jimmy Villarroel Novillo (JVN) 
-> **Universidad:** Universidad Mayor de San Simón (UMSS) — Cochabamba, Bolivia  
-> **Equipo:** **Grupo 15**  
-> * **Butrón Agreda Juan Adiel** 
-> * **Vasquez Maldonado Bryan** 
-> * **Vera Vera Fernando**
+
 ---
 
 ## 1. Descripción del Proyecto
