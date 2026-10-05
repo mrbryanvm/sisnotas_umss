@@ -24,7 +24,7 @@ Reglas de evaluación reales de la UMSS implementadas:
 # CONSTANTES DEL REGLAMENTO (hacerlas constantes facilita la Auditoría:
 # si el reglamento cambia, solo se toca aquí, no en todo el código)
 # ---------------------------------------------------------------------------
-NOTA_MINIMA_APROBACION    = 51    # Puntos mínimos para aprobar
+NOTA_MINIMA_APROBACION    = 50    # Puntos mínimos para aprobar
 NOTA_MINIMA_INSTANCIA     = 26    # Puntos mínimos en parciales para acceder a instancia
 NOTA_MAXIMA_NOTA_FINAL    = 100   # Máximo de puntos en cualquier examen
 NOTA_MINIMA_EXAMEN        = 0     # Mínimo de puntos en cualquier examen
