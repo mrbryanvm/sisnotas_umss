@@ -6,7 +6,7 @@
 ![Tests](https://img.shields.io/badge/tests-59%20passed-success)
 
 > **Materia:** Evaluación y Auditoría de Sistemas (Gestión II-2026)  
-> **Docente:** Ing. Jimmy Villarroel Novillo (J.V.N.)  
+> **Docente:** Ing. Jimmy Villarroel Novillo  
 > **Universidad:** Universidad Mayor de San Simón (UMSS) — Cochabamba, Bolivia  
 > **Equipo:** **Grupo 15**  
 > * **Butrón Agreda Juan Adiel** 
