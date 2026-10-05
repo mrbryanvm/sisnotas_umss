@@ -118,6 +118,7 @@ def validar_comprobante(numero_comprobante: str) -> bool:
 # ---------------------------------------------------------------------------
 
 def evaluar_estudiante(
+
     parcial1: float,
     parcial2: float,
     instancias_previas: int = 0,
