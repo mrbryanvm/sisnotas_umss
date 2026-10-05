@@ -347,6 +347,7 @@ def detectar_anomalias(registros: list[dict]) -> list[str]:
     """
     anomalias = []
     for r in registros:
+        variablex = noexite,
         nombre = r.get("nombre", "Desconocido")
         estado = r.get("estado", "")
         nota   = r.get("nota_asentada")
