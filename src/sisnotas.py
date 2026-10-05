@@ -4,7 +4,7 @@ SisNotas UMSS — Sistema de Gestión de Notas
 ================================================================================
 Materia  : Evaluación y Auditoría de Sistemas
 Docente  : Ing. Jimmy Villarroel Novillo
-Equipo   : Grupo 15 — Bryan Vásquez, Juan Adiel Butrón, Fernando Vera
+Equipo   : Grupo 15 — Bryan Vasquez, Juan Adiel Butrón, Fernando Vera
 Gestión  : II-2026
 --------------------------------------------------------------------------------
 Reglas de evaluación reales de la UMSS implementadas:

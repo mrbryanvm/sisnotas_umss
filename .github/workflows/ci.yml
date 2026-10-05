@@ -6,7 +6,7 @@
 # Equipo   : Grupo 15 (Bryan Vásquez M., Juan Adiel Butrón A., Fernando Vera V.)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-name: 🧪 CI - Automatización de Pruebas y Auditoría
+name: CI - Automatización de Pruebas y Auditoría
 
 # ── 1. DISPARADORES (Triggers / Eventos) ────────────────────────────────────────
 # Define CUÁNDO se activa este robot en la nube.
@@ -31,26 +31,26 @@ jobs:
   # Conexión Cátedra: Unidad 2 — Técnicas de Evaluación Estática (sin ejecutar)
   # ─────────────────────────────────────────────────────────────────────────────
   evaluacion-estatica:
-    name: 🔍 1. Evaluación Estática (Flake8 & Sintaxis)
+    name: 1. Evaluación Estática (Flake8 & Sintaxis)
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
-      - name: 📥 Clonar código del repositorio
+      - name: Clonar código del repositorio
         uses: actions/checkout@v4
 
-      - name: 🐍 Configurar entorno Python 3.12
+      - name: Configurar entorno Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"  # Acelera la descarga guardando dependencias en caché
 
-      - name: 📦 Instalar herramientas de inspección estática
+      - name: Instalar herramientas de inspección estática
         run: |
           python -m pip install --upgrade pip
           pip install flake8
 
-      - name: 🔎 Inspección de estilo y errores sintácticos (Flake8)
+      - name: Inspección de estilo y errores sintácticos (Flake8)
         run: |
           echo "Ejecutando análisis estático sobre src/ y tests/..."
           # Detiene la ejecución si hay errores de sintaxis o variables no definidas
@@ -63,7 +63,7 @@ jobs:
   # Conexión Cátedra: Unidad 3 — Técnicas de Evaluación Dinámica (Caja Blanca/Negra)
   # ─────────────────────────────────────────────────────────────────────────────
   evaluacion-dinamica:
-    name: 🧪 2. Evaluación Dinámica (Pytest en Python ${{ matrix.python-version }})
+    name: 2. Evaluación Dinámica (Pytest en Python ${{ matrix.python-version }})
     needs: evaluacion-estatica  # Solo se ejecuta si la evaluación estática tuvo éxito
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -75,21 +75,21 @@ jobs:
       fail-fast: false # Si una versión falla, no cancela las demás; queremos ver el reporte completo
 
     steps:
-      - name: 📥 Clonar código del repositorio
+      - name: Clonar código del repositorio
         uses: actions/checkout@v4
 
-      - name: 🐍 Configurar Python ${{ matrix.python-version }}
+      - name: Configurar Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
 
-      - name: 📦 Instalar dependencias del sistema y de pruebas
+      - name: Instalar dependencias del sistema y de pruebas
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-dev.txt
 
-      - name: 🚀 Ejecutar Suite de Pruebas Pytest + Cobertura de Código
+      - name: Ejecutar Suite de Pruebas Pytest + Cobertura de Código
         run: |
           pytest tests/ -v \
             --tb=short \
@@ -99,7 +99,7 @@ jobs:
             --cov-fail-under=90 \
             --junitxml=test-results-${{ matrix.python-version }}.xml
 
-      - name: 📊 Subir Reporte HTML de Cobertura como Artefacto
+      - name: Subir Reporte HTML de Cobertura como Artefacto
         if: always() # Se sube siempre, incluso si falló algún test
         uses: actions/upload-artifact@v4
         with:
@@ -107,7 +107,7 @@ jobs:
           path: htmlcov/
           retention-days: 7
 
-      - name: 📑 Subir Resultados JUnit XML como Artefacto
+      - name: Subir Resultados JUnit XML como Artefacto
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -120,13 +120,13 @@ jobs:
   # Conexión Cátedra: 2do Parcial — Dictamen de Auditoría y Control Interno
   # ─────────────────────────────────────────────────────────────────────────────
   dictamen-auditoria:
-    name: ⚖️ 3. Dictamen y Veredicto de Calidad
+    name: 3. Dictamen y Veredicto de Calidad
     needs: [evaluacion-estatica, evaluacion-dinamica]
     runs-on: ubuntu-latest
     if: always() # Evalúa tanto si los anteriores pasaron como si fallaron
 
     steps:
-      - name: 📋 Determinar Veredicto del Pipeline
+      - name: Determinar Veredicto del Pipeline
         run: |
           echo "================================================================="
           echo "           TRIBUNAL DE AUDITORÍA AUTOMATIZADA DE SOFTWARE        "
@@ -134,7 +134,7 @@ jobs:
           echo "Estado Evaluación Estática : ${{ needs.evaluacion-estatica.result }}"
           echo "Estado Evaluación Dinámica : ${{ needs.evaluacion-dinamica.result }}"
           echo "-----------------------------------------------------------------"
-          
+
           if [ "${{ needs.evaluacion-estatica.result }}" == "success" ] && [ "${{ needs.evaluacion-dinamica.result }}" == "success" ]; then
             echo "🟢 DICTAMEN: FAVORABLE / LIMPIO"
             echo "El software cumple razonablemente en todos sus aspectos con los"
